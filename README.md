@@ -1,28 +1,31 @@
-# Illustrator RS v0.3 — Light Gray UI + Next.js 15 + Rust + Tauri 2
+# Illustrator RS v0.4 — Rust + Tailwind CSS
 
-Windows native desktop app using a statically exported Next.js UI and Rust document/editor core.
+Desktop vector editor MVP for Windows. **No Next.js, React, or localhost server in release builds.** Rust (`document`, `editor`, Tauri commands) owns document mutations and history. A static HTML + Tailwind CSS interface uses a small vanilla JavaScript bridge to invoke Rust.
 
 ## GitHub Actions
-Push the repository contents (including the `web/` folder) to `main`, then open **Actions → Windows Desktop Build**. Download the `IllustratorRS-Windows-x64` artifact. The EXE uses Microsoft Edge WebView2 runtime (typically preinstalled on Windows 10/11).
+Upload the **contents** of this directory to the repository root. Actions → Windows Desktop Build (Rust + Tailwind CSS) → Run workflow. Download the `IllustratorRS-Windows-x64` artifact. The portable executable requires Microsoft Edge WebView2 Runtime (normally present on Windows 11).
 
-## Development
-- Install Node.js 22, Rust stable MSVC, Visual Studio C++ Build Tools, WebView2.
-- `npm install --prefix web`
-- `npm run build --prefix web`
-- `cargo test -p illustrator-document -p illustrator-editor`
-- `cargo run -p illustrator-desktop`
+## Local build
+```powershell
+cd web
+npm install
+npm run build
+cd ..
+cargo test -p illustrator-document -p illustrator-editor
+cargo build --release -p illustrator-desktop
+```
 
-## Features
-Rectangle creation (M + drag), select/move (V), pan (Hand tool or middle mouse), wheel pan, Ctrl+wheel zoom, layers selection, Ctrl+Z/Ctrl+Y history.
+`target/release/illustrator-desktop.exe` embeds the files from `web/dist` via Tauri. It **does not connect to localhost**. Run `npm run build` before `cargo build`.
 
-Next.js is exported as static assets. No Next server or Node runtime is required for the packaged desktop app.
+## Controls
+- V: Select / drag to move
+- M: Draw rectangle
+- H: Pan
+- Ctrl+Z / Ctrl+Y: Undo / Redo
+- Ctrl+Mouse wheel: Zoom
 
-## Known limitations
-Document is in-memory; no save/load yet. Browser-only preview cannot mutate Rust state. Tauri packaging and full Windows compilation must be validated in GitHub Actions.
+## Scope
+Rectangle editor only; no SVG export, Pen tool, resizing, or save/load yet. The frontend requires a tiny vanilla JavaScript bridge; the document and editing engine remain in Rust.
 
-## Light Gray UI
-The editor now uses a light-gray workspace, white artboard, soft-gray panels, blue selection accents, and light native window background. Existing Rust commands, canvas interactions, and Windows GitHub Actions are retained.
-
-## GitHub repository layout
-
-Upload the **contents** of `illustrator-rs/` to the repository root. The repository root must contain `Cargo.toml`, `web/package.json`, and `.github/workflows/windows-build.yml`. The workflow uses `working-directory: web` for npm commands.
+## Notes
+Build is configured for Windows GitHub Actions, but has not been executed on a Windows runner in this environment. `web/dist` is generated in CI and is intentionally not committed.

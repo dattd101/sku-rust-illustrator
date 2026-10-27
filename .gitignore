@@ -1,7 +1,4 @@
-/target
-/web/node_modules
-/web/.next
-/web/out
-/web/tsconfig.tsbuildinfo
-/dist
-*.zip
+/target/
+/web/node_modules/
+/web/dist/
+.DS_Store

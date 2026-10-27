@@ -1,1 +1,11 @@
-{"name":"illustrator-rs-ui","version":"0.2.0","private":true,"scripts":{"dev":"next dev","build":"next build","lint":"next lint"},"dependencies":{"next":"15.5.12","react":"19.1.1","react-dom":"19.1.1","lucide-react":"^0.468.0","@tauri-apps/api":"^2.0.0"},"devDependencies":{"typescript":"^5.7.0","@types/node":"^22.0.0","@types/react":"^19.0.0","@types/react-dom":"^19.0.0","tailwindcss":"^3.4.0","postcss":"^8.4.0","autoprefixer":"^10.4.0"}}
+{
+  "name": "illustrator-rs-tailwind-ui",
+  "private": true,
+  "version": "0.4.0",
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

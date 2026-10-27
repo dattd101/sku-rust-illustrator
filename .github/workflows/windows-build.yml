@@ -1,4 +1,4 @@
-name: Windows Desktop Build (Next.js 15 + Tauri 2)
+name: Windows Desktop Build (Rust + Tailwind CSS)
 on:
   push:
     branches: [main, master]
@@ -9,7 +9,7 @@ permissions:
 jobs:
   windows:
     runs-on: windows-latest
-    timeout-minutes: 65
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,21 +22,23 @@ jobs:
       - name: Verify repository layout
         shell: pwsh
         run: |
-          Write-Host "Repository root: $PWD"
-          Get-ChildItem -Name
-          if (!(Test-Path "web/package.json")) { throw "Missing web/package.json. Upload the CONTENTS of illustrator-rs to repository root, not the parent folder." }
-          if (!(Test-Path "Cargo.toml")) { throw "Missing root Cargo.toml" }
-      - name: Install frontend dependencies
+          if (!(Test-Path 'web/package.json')) { throw 'Missing web/package.json at repository root' }
+          if (!(Test-Path 'apps/desktop/tauri.conf.json')) { throw 'Missing Tauri config' }
+      - name: Install Tailwind build dependencies
         working-directory: web
         run: npm install --no-audit --no-fund
-      - name: Build Next.js static UI
+      - name: Build offline UI assets
         working-directory: web
         run: npm run build
+      - name: Verify static UI assets
+        shell: pwsh
+        run: |
+          foreach ($file in @('web/dist/index.html','web/dist/app.js','web/dist/styles.css')) { if (!(Test-Path $file)) { throw "Missing $file" } }
       - name: Test Rust core
         run: cargo test -p illustrator-document -p illustrator-editor
-      - name: Build Windows desktop executable
+      - name: Build portable Windows executable
         run: cargo build --release -p illustrator-desktop
-      - name: Package portable EXE
+      - name: Package executable
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force dist | Out-Null
@@ -47,4 +49,3 @@ jobs:
           name: IllustratorRS-Windows-x64
           path: IllustratorRS-Windows-x64.zip
           if-no-files-found: error
-          retention-days: 14
