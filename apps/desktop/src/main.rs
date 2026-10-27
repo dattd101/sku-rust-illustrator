@@ -105,15 +105,15 @@ impl IllustratorApp {
             }
             let r = to_screen(rect);
             art_painter.rect_filled(r, 0.0, Color32::from_rgb(82, 151, 226));
-            art_painter.rect_stroke(r, 0.0, Stroke::new(1.0, Color32::from_rgb(35, 83, 150)), StrokeKind::Inside);
+            art_painter.rect_stroke(r, 0.0, Stroke::new(1.0_f32, Color32::from_rgb(35, 83, 150)), StrokeKind::Inside);
             if self.editor.selected == Some(node.id) {
-                art_painter.rect_stroke(r.expand(2.0), 0.0, Stroke::new(2.0, Color32::from_rgb(255, 130, 40)), StrokeKind::Outside);
+                art_painter.rect_stroke(r.expand(2.0), 0.0, Stroke::new(2.0_f32, Color32::from_rgb(255, 130, 40)), StrokeKind::Outside);
             }
         }
         if let Some(Drag::Create { start, current }) = self.drag {
             let r = to_screen(Rect::from_points(start, current));
             art_painter.rect_filled(r, 0.0, Color32::from_rgba_unmultiplied(82, 151, 226, 70));
-            art_painter.rect_stroke(r, 0.0, Stroke::new(1.5, Color32::from_rgb(35, 83, 150)), StrokeKind::Inside);
+            art_painter.rect_stroke(r, 0.0, Stroke::new(1.5_f32, Color32::from_rgb(35, 83, 150)), StrokeKind::Inside);
         }
     }
 }
@@ -131,7 +131,7 @@ impl eframe::App for IllustratorApp {
         }
 
         egui::TopBottomPanel::top("menu").show(ctx, |ui| {
-            egui::MenuBar::new().ui(ui, |ui| {
+            egui::menu::bar(ui, |ui| {
                 ui.label(egui::RichText::new("Illustrator RS").strong());
                 ui.separator();
                 if ui.add_enabled(self.editor.can_undo() && self.drag.is_none(), egui::Button::new("Undo  Ctrl+Z")).clicked() {
