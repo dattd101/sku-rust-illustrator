@@ -22,3 +22,7 @@ Document is in-memory; no save/load yet. Browser-only preview cannot mutate Rust
 
 ## Light Gray UI
 The editor now uses a light-gray workspace, white artboard, soft-gray panels, blue selection accents, and light native window background. Existing Rust commands, canvas interactions, and Windows GitHub Actions are retained.
+
+## GitHub repository layout
+
+Upload the **contents** of `illustrator-rs/` to the repository root. The repository root must contain `Cargo.toml`, `web/package.json`, and `.github/workflows/windows-build.yml`. The workflow uses `working-directory: web` for npm commands.
