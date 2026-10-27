@@ -1,2 +1,7 @@
 /target
-*.rs.bk
+/web/node_modules
+/web/.next
+/web/out
+/web/tsconfig.tsbuildinfo
+/dist
+*.zip

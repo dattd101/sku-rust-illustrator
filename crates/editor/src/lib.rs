@@ -95,6 +95,10 @@ impl Editor {
         }
     }
 
+    pub fn select_id(&mut self, id: Option<NodeId>) {
+        self.selected = id.filter(|id| self.document.get(*id).is_some());
+    }
+
     pub fn can_undo(&self) -> bool { !self.undo_stack.is_empty() }
     pub fn can_redo(&self) -> bool { !self.redo_stack.is_empty() }
 }

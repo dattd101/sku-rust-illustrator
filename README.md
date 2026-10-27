@@ -1,44 +1,24 @@
-# Illustrator RS — Sprint 01
+# Illustrator RS v0.3 — Light Gray UI + Next.js 15 + Rust + Tauri 2
 
-Native vector editor prototype for Windows, built with Rust and egui/eframe.
+Windows native desktop app using a statically exported Next.js UI and Rust document/editor core.
 
-## Requirements
-- Rust stable via rustup (MSVC toolchain on Windows)
-- Visual Studio Build Tools with C++ desktop workload and Windows SDK
+## GitHub Actions
+Push the repository contents (including the `web/` folder) to `main`, then open **Actions → Windows Desktop Build**. Download the `IllustratorRS-Windows-x64` artifact. The EXE uses Microsoft Edge WebView2 runtime (typically preinstalled on Windows 10/11).
 
-## Run
-```powershell
-cargo test --workspace
-cargo run -p illustrator-desktop
-```
+## Development
+- Install Node.js 22, Rust stable MSVC, Visual Studio C++ Build Tools, WebView2.
+- `npm install --prefix web`
+- `npm run build --prefix web`
+- `cargo test -p illustrator-document -p illustrator-editor`
+- `cargo run -p illustrator-desktop`
 
-## Usage
-- Rectangle: choose Rectangle tool and drag on the white artboard.
-- Select: choose Select tool and click a rectangle.
-- Move: drag a selected or unselected rectangle with the Select tool.
-- Undo: Ctrl+Z; Redo: Ctrl+Y (or Ctrl+Shift+Z).
+## Features
+Rectangle creation (M + drag), select/move (V), pan (Hand tool or middle mouse), wheel pan, Ctrl+wheel zoom, layers selection, Ctrl+Z/Ctrl+Y history.
 
-## Architecture
-- `illustrator-document`: document objects and geometry.
-- `illustrator-editor`: commands, selection, undo/redo.
-- `illustrator-desktop`: native UI, mouse input, egui rendering.
+Next.js is exported as static assets. No Next server or Node runtime is required for the packaged desktop app.
 
-## Sprint 01 limitations
-No zoom/pan, resizing, serialization, paths, SVG, or custom wgpu renderer yet.
+## Known limitations
+Document is in-memory; no save/load yet. Browser-only preview cannot mutate Rust state. Tauri packaging and full Windows compilation must be validated in GitHub Actions.
 
-## Verification
-Source files were generated, but not compiled in the authoring environment because Rust/Cargo were unavailable there. Run `cargo test --workspace` and `cargo run -p illustrator-desktop` on Windows to validate.
-
-## GitHub Actions: build Windows executable without local Rust
-
-1. Create a GitHub repository and upload **the contents** of this `illustrator-rs` directory to the repository root (including `.github/workflows/windows-build.yml`).
-2. Push to `main` or `master`, or open **Actions → Windows Build → Run workflow**.
-3. Wait for the `Test and build Windows x64` job to finish.
-4. On the workflow run page, scroll to **Artifacts** and download `IllustratorRS-Windows-x64`.
-5. Extract the downloaded artifact, then extract `IllustratorRS-Windows-x64.zip` inside it. Launch `IllustratorRS.exe` on Windows x64.
-
-The workflow runs `cargo check --workspace`, `cargo test --workspace`, and a release build targeting `x86_64-pc-windows-msvc`. It uses the GitHub-hosted Windows runner, so no Rust installation on your own PC is necessary. The build artifact is **not** a GitHub Release and is not code-signed. Windows SmartScreen may show a warning for an unsigned executable.
-
-For reproducible dependencies, generate and commit `Cargo.lock` once a successful build has created it. You can then add `--locked` to the Cargo commands in the workflow.
-
-**Note:** The source and workflow have not been executed in this environment. GitHub Actions is the build verification source; inspect its logs if a step fails.
+## Light Gray UI
+The editor now uses a light-gray workspace, white artboard, soft-gray panels, blue selection accents, and light native window background. Existing Rust commands, canvas interactions, and Windows GitHub Actions are retained.

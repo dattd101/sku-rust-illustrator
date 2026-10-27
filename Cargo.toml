@@ -5,6 +5,3 @@ members = ["crates/document", "crates/editor", "apps/desktop"]
 [workspace.package]
 edition = "2021"
 license = "MIT"
-
-[workspace.dependencies]
-eframe = "0.31"

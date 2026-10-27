@@ -1,9 +1,13 @@
 [package]
 name = "illustrator-desktop"
-version = "0.1.0"
+version = "0.2.0"
 edition.workspace = true
 
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
 [dependencies]
-eframe.workspace = true
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
 illustrator-document = { path = "../../crates/document" }
 illustrator-editor = { path = "../../crates/editor" }

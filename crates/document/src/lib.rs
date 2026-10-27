@@ -1,4 +1,5 @@
-#[derive(Clone, Copy, Debug, Default, PartialEq)]
+use serde::{Serialize, Deserialize};
+#[derive(Clone, Copy, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct Point {
     pub x: f64,
     pub y: f64,
@@ -8,7 +9,7 @@ impl Point {
     pub const fn new(x: f64, y: f64) -> Self { Self { x, y } }
 }
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Rect {
     pub x: f64,
     pub y: f64,
@@ -36,7 +37,7 @@ impl Rect {
 
 pub type NodeId = u64;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RectangleNode {
     pub id: NodeId,
     pub name: String,
