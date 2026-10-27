@@ -1,0 +1,9 @@
+[package]
+name = "illustrator-desktop"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+eframe.workspace = true
+illustrator-document = { path = "../../crates/document" }
+illustrator-editor = { path = "../../crates/editor" }

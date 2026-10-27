@@ -1,0 +1,7 @@
+[package]
+name = "illustrator-editor"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+illustrator-document = { path = "../document" }

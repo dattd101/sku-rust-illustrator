@@ -1,0 +1,54 @@
+name: Windows Build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Test and build Windows x64
+    runs-on: windows-latest
+    timeout-minutes: 45
+    env:
+      CARGO_TERM_COLOR: always
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install stable Rust (MSVC)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Cache Cargo build
+        uses: Swatinem/rust-cache@v2
+
+      - name: Check workspace
+        run: cargo check --workspace
+
+      - name: Run unit tests
+        run: cargo test --workspace
+
+      - name: Build release executable
+        run: cargo build --release -p illustrator-desktop --target x86_64-pc-windows-msvc
+
+      - name: Package portable Windows app
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Copy-Item target/x86_64-pc-windows-msvc/release/illustrator-desktop.exe dist/IllustratorRS.exe
+          Copy-Item README.md dist/README.md
+          Compress-Archive -Path dist/* -DestinationPath IllustratorRS-Windows-x64.zip -Force
+
+      - name: Upload Windows executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: IllustratorRS-Windows-x64
+          path: IllustratorRS-Windows-x64.zip
+          if-no-files-found: error
+          retention-days: 14
